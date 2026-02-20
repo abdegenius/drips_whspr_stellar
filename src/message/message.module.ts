@@ -23,6 +23,7 @@ import { ProfanityFilterService } from './services/profanity-filter.service';
 import { MessageBroadcastService } from './services/message-broadcast.service';
 import { UsersModule } from '../users/users.module';
 import { NotificationsModule } from '../notifications/notifications.module';
+import { AdminModule } from '../admin/admin.module';
 
 import { StorageModule } from '../storage/storage.module';
 
@@ -33,6 +34,7 @@ import { StorageModule } from '../storage/storage.module';
     RedisModule,
     CacheModule,
     UsersModule,
+    AdminModule,
     forwardRef(() => NotificationsModule),
   ],
   providers: [

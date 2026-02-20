@@ -990,6 +990,9 @@ export class AdminService {
 
     // Update config
     config.value = dto.value;
+    if (dto.description !== undefined) {
+      config.description = dto.description;
+    }
     config.updatedBy = adminId;
     const saved = await this.platformConfigRepository.save(config);
 

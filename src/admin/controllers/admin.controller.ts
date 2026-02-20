@@ -292,6 +292,7 @@ export class AdminController {
 
   @Get('config')
   @Roles(UserRole.SUPER_ADMIN)
+  @UseGuards(RoleGuard)
   async getConfigs() {
     return await this.adminService.getConfigs();
   }
@@ -299,6 +300,7 @@ export class AdminController {
   @Patch('config/:key')
   @HttpCode(HttpStatus.OK)
   @Roles(UserRole.SUPER_ADMIN)
+  @UseGuards(RoleGuard)
   async updateConfig(
     @Param('key') key: string,
     @Body() dto: UpdateConfigDto,

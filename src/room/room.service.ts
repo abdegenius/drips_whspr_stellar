@@ -20,6 +20,7 @@ import { UpdateRoomDto } from './dto/update-room.dto';
 import { MemberRole, MemberStatus, RoomMember } from './entities/room-member.entity';
 import { ROLE_PERMISSIONS, ROOM_MEMBER_CONSTANTS } from './constants/room-member.constants';
 import { RoomType } from './entities/room.entity';
+import { AdminService } from '../admin/services/admin.service';
 
 @Injectable()
 export class RoomSettingsService {
@@ -134,6 +135,7 @@ export class RoomService {
   constructor(
     private roomRepository: RoomRepository,
     private roomMemberRepository: RoomMemberRepository,
+    private readonly adminService: AdminService,
   ) {}
 
   async createRoom(userId: string, dto: CreateRoomDto): Promise<Room> {
@@ -145,6 +147,11 @@ export class RoomService {
       true,
     );
 
+    const globalMaxMembers = await this.adminService.getConfigValue<number>(
+      'max_room_members',
+      ROOM_MEMBER_CONSTANTS.DEFAULT_MAX_MEMBERS,
+    );
+
     const room = this.roomRepository.create({
       name: trimmedName,
       description: dto.description?.trim(),
@@ -154,7 +161,7 @@ export class RoomService {
       isPrivate: this.resolveIsPrivate(roomType, dto.isPrivate),
       isTokenGated: dto.isTokenGated ?? roomType === RoomType.TOKEN_GATED,
       icon: dto.icon,
-      maxMembers: dto.maxMembers ?? ROOM_MEMBER_CONSTANTS.DEFAULT_MAX_MEMBERS,
+      maxMembers: dto.maxMembers ?? globalMaxMembers,
       isActive: dto.isActive ?? true,
       memberCount: 0,
       entryFee: dto.entryFee ?? '0',

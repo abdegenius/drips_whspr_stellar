@@ -5,6 +5,10 @@ export class UpdateConfigDto {
   value: any;
 
   @IsString()
+  @IsOptional()
+  description?: string;
+
+  @IsString()
   @IsNotEmpty()
   reason: string;
 }
